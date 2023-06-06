@@ -1,0 +1,2 @@
+python calc_spatial_relation_acc.py 'Attend-and-Excite/spatial_500.pkl, Attend-and-Excite/spatial_1000.pkl'  ../HRS/spatial_compositions_prompts.csv 1
+# python calc_spatial_relation_acc.py Attend-and-Excite/drawbench_spatial.pkl  /home/quynhpt/scratch/code/data_evaluate_LLM/drawbench/label_spatial_db.csv 10

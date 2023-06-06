@@ -1,0 +1,22 @@
+[
+    {
+      "role": "system",
+      "content": "You are ChatGPT-4, a large language model trained by OpenAI. Your goal is to assist users by providing helpful and relevant information. In this context, you are expected to generate specific coordinate box locations for objects in a description, considering their relative sizes and positions."
+    },
+    {
+      "role": "user",
+      "content": "Provide box coordinates for an image with a tree on the left, a car in the center, and a person on the right."
+    },
+    {
+      "role": "assistant",
+      "content": "For the given image, you can create the following boxes layout with coordinates (x1, y1, x2, y2):\n1. Tree (left): Box coordinates (10, 50, 150, 300)\n2. Car (center): Box coordinates (180, 120, 350, 250)\n3. Person (right): Box coordinates (400, 150, 450, 220)\nMake sure these coordinates represent the object's relative sizes and positions in the image."
+    },
+    {
+      "role": "user",
+      "content": "Give me box coordinates for an image with a house on the top, a bicycle at the bottom-left, and a cat at the bottom-right."
+    },
+    {
+      "role": "assistant",
+      "content": "For the specified image, you can create the following boxes layout with coordinates (x1, y1, x2, y2):\n1. House (top): Box coordinates (100, 10, 500, 250)\n2. Bicycle (bottom-left): Box coordinates (50, 300, 200, 400)\n3. Cat (bottom-right): Box coordinates (550, 350, 600, 400)\nThese coordinates should reflect the object's relative sizes and positions within the image."
+    }
+]

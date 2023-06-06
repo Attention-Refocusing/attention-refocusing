@@ -1,0 +1,6 @@
+# python hue_based_color_classifier.py   /home/quynhpt/scratch/code/HRS_benchmark/codes/eval_metrics/colors/MaskDINO/demo/GLIGEN_True_hrs_loss_gate /home/quynhpt/scratch/code/data_evaluate_LLM/HRS/colors_composition_prompts.csv /home/quynhpt/scratch/code/Gligen_v2/True_hrs_loss_gate/color_img 
+
+# python hue_based_color_classifier.py /home/quynhpt/scratch/code/HRS_benchmark/codes/eval_metrics/colors/MaskDINO/demo/True_stable_self_cross  /home/quynhpt/scratch/code/data_evaluate_LLM/HRS/colors_composition_prompts.csv /home/quynhpt/scratch/code/Gligen_v2/True_stable_self_cross/color_img
+
+python hue_based_color_classifier.py /home/quynhpt/scratch/code/HRS_benchmark/codes/eval_metrics/colors/MaskDINO/demo/Attend-and-Excite  /home/quynhpt/scratch/code/data_evaluate_LLM/HRS/colors_composition_prompts.csv /home/quynhpt/scratch/code/Attend-and-Excite/hrs_loss_updated/color
+# python hue_based_color_classifier.py /home/quynhpt/scratch/code/HRS_benchmark/codes/eval_metrics/colors/MaskDINO/demo/multi_diffu  /home/quynhpt/scratch/code/data_evaluate_LLM/HRS/colors_composition_prompts.csv /home/quynhpt/scratch/code/multi_diffu/HRS_loss/color

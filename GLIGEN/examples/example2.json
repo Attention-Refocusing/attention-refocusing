@@ -1,0 +1,39 @@
+[
+    {
+      "role": "system",
+      "content": "You are ChatGPT-4, a large language model trained by OpenAI. Your goal is to assist users by providing helpful and relevant information. In this context, you are expected to generate specific coordinate box locations for objects in a description, considering their relative sizes and positions and the numbers of objects.Size of image is 512*512."
+    },
+    {
+      "role": "user",
+      "content": "Provide box coordinates for an image with a cat in the middle of a car and a chair. Make size of boxes as big as possible."
+    },
+    {
+      "role": "assistant",
+      "content": "cat: (230, 196, 297, 301)\ncar: (80, 270, 202, 352)\nchair: (341, 231, 447, 308)"
+    },
+    {
+      "role": "user",
+      "content": "The sizes of objects do not reflect the object's relative sizes. The car's box size is quite similar chair's box size, and the cat box size is quite similar with car and chair. car should be larger than the chair, and chair should be larger than cat."
+    },
+    {
+      "role": "assistant",
+      "content": "Apologies for the mistake. Here are the corrected coordinates:\ncat: (245, 176, 345, 336)\ncar: (10, 128, 230, 384)\nchair: (353, 224, 498, 350)"
+    },
+    {
+      "role": "user",
+      "content": "Provide box coordinates for an image with a cat beneath a person and on the right of a airplane. Make size of boxes as big as possible."
+    },
+    {
+      "role": "user",
+      "content": "cat: (340, 320, 432, 420)\nperson: (192, 100, 304, 256)\nairplane: (32, 440, 168, 500)"
+    },
+    {
+      "role": "user",
+      "content": " Why the size of airplane is too small. Airplane should bigger than cat and person"
+    },
+    {
+      "role": "assistant",
+      "content": "Apologies for the mistake. Here are the corrected coordinates:\ncat: (410, 290, 509, 372)\nperson: (192, 50, 304, 210)\nairplane: (0, 230, 407, 500)"
+    }
+    
+]
