@@ -1,10 +1,13 @@
-# Attention-refocusing: Grounded Text-to-Image Synthesis with Attention-based Guidance
+# Grounded Text-to-Image Synthesis with Attention Refocusing
 
-[Project Page](https://attention-refocusing.github.io)
+[[Websit](https://attention-refocusing.github.io)]
 [[Paper]()]
-This is the official implementation of the paper "Grounded Text-to-Image Synthesis with Attention-based Guidance"
+This is the official implementation of the paper "Grounded Text-to-Image Synthesis with Attention Refocusing"
 
-![Teaser figure](figures/teaser.png)
+
+https://github.com/Attention-Refocusing/attention-refocusing/assets/135548632/23195e0c-b7f9-4abb-8903-f3601a5a2590
+
+
 ## Requirements
 ```bash
 conda create --name ldm_layout python==3.8.0
@@ -15,6 +18,9 @@ pip install git+https://github.com/CompVis/taming-transformers.git
 pip install git+https://github.com/openai/CLIP.git
 ```
 ## Inference 
+
+![Teaser figure](figures/teaser.png)
+
 Download the model [GLIGEN](https://huggingface.co/gligen/gligen-generation-text-box/blob/main/diffusion_pytorch_model.bin) and put them in `gligen_checkpoints`
 
 
