@@ -1,7 +1,7 @@
 # Grounded Text-to-Image Synthesis with Attention Refocusing
 
-[[Websit](https://attention-refocusing.github.io)]
-[[Paper]()]
+[[Website](https://attention-refocusing.github.io)]
+
 This is the official implementation of the paper "Grounded Text-to-Image Synthesis with Attention Refocusing"
 
 
