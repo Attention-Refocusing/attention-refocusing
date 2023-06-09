@@ -1,6 +1,6 @@
 # Attention Refocusing
 
-[[Website](https://attention-refocusing.github.io)][[Demo]()(Coming soon)]
+[[Website](https://attention-refocusing.github.io)][[Demo](https://huggingface.co/spaces/attention-refocusing/Attention-refocusing)]
 
 This is the official implementation of the paper "Grounded Text-to-Image Synthesis with Attention Refocusing"
 
@@ -55,7 +55,7 @@ python guide_gligen.py --ckpt gligen_checkpoints/diffusion_pytorch_model.bin --f
 To run with user input text prompts:
 ```bash
 export OPENAI_API_KEY='your-api-key'
-python inference.py
+python inference.py --ckpt gligen_checkpoints/diffusion_pytorch_model.bin
 ```
 We provide generated layout from GPT4 for HRS benchmark in the  [HRS boxes](data_evaluate_LLM/gpt_generated_box), [DrawBench boxes](data_evaluate_LLM/gpt_generated_box_drawbench)  
 We also provide generated images from GLIGEN, and other baselines including Stable Diffusion, Attend-and-excite, MultiDiffusion, Layout-guidance, GLIGEN and ours [here](https://drive.google.com/drive/folders/1t9LNoVppVsJG9B2LcvXF-4GMVXucbvlS?usp=sharing)
@@ -70,8 +70,3 @@ This project is built on the following resources:
 - [**GLIGEN**](https://github.com/gligen/GLIGEN): Our code is built upon the foundational work provided by GLIGEN. 
 
 - [**HRS**](https://github.com/eslambakr/HRS_benchmark): The evaluation component of our project has been adopted from HRS. 
-
-
-
-
-
