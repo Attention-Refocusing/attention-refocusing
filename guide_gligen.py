@@ -511,13 +511,13 @@ if __name__ == "__main__":
     ]
     if args.data_type=='HRS':
         if args.type=='counting':
-            _ ,prompts = load_gt('../data_evaluate_LLM/HRS/counting_prompts.csv')
+            _ ,prompts = load_gt('data_evaluate_LLM/HRS/counting_prompts.csv')
         elif args.type=='spatial':
-            prompts, _ = load_gt('../data_evaluate_LLM/HRS/spatial_compositions_prompts.csv')
+            prompts, _ = load_gt('data_evaluate_LLM/HRS/spatial_compositions_prompts.csv')
         elif args.type=='size':
-            prompts, _ = load_gt('../data_evaluate_LLM/HRS/size_compositions_prompts.csv')
+            prompts, _ = load_gt('data_evaluate_LLM/HRS/size_compositions_prompts.csv')
         elif args.type=='color':
-            prompts, _ = load_gt("../data_evaluate_LLM/HRS/colors_composition_prompts.csv")
+            prompts, _ = load_gt("data_evaluate_LLM/HRS/colors_composition_prompts.csv")
         # elif args.type=='action':
         #     prompts = read_txt_hrs('/vulcanscratch/chuonghm/data_evaluate_LLM/HRS/actions_composition_prompts.txt')
         # elif args.type == 'creativity':
