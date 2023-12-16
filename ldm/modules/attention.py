@@ -126,15 +126,7 @@ class CrossAttention(nn.Module):
             max_neg_value = -torch.finfo(sim.dtype).max
             sim.masked_fill_(~mask, max_neg_value)
         return sim 
-    # def scaled_dot_product(q, k, v, mask=None):
-    #     d_k = q.size()[-1]
-    #     attn_logits = torch.matmul(q, k.transpose(-2, -1))
-    #     attn_logits = attn_logits / math.sqrt(d_k)
-    #     if mask is not None:
-    #         attn_logits = attn_logits.masked_fill(mask == 0, -9e15)
-    #     attention = F.softmax(attn_logits, dim=-1)
-    #     values = torch.matmul(attention, v)
-    #     return values, attention
+
 
     def forward(self, x, key, value, mask=None):
         # import pdb; pdb.set_trace()
@@ -154,13 +146,12 @@ class CrossAttention(nn.Module):
         sim = torch.einsum('b i d, b j d -> b i j', q, k) * self.scale # (B*H)*N*M
         self.fill_inf_from_mask(sim, mask)
         attn = sim.softmax(dim=-1) # (B*H)*N*M
-        # import pdb; pdb.set_trace()
-        # if attn.shape[1] == 4096:
-        #    self.visual_att(attn)
+       
         out = torch.einsum('b i j, b j d -> b i d', attn, v) # (B*H)*N*C
         out = out.view(B,H,N,C).permute(0,2,1,3).reshape(B,N,(H*C)) # B*N*(H*C)
-
         return self.to_out(out), attn
+      
+        
     def visual_att(self, att):
         global iter_att
         ll = [0,2,7]
@@ -201,12 +192,12 @@ class SelfAttention(nn.Module):
 
         sim = torch.einsum('b i c, b j c -> b i j', q, k) * self.scale  # (B*H)*N*N
         attn = sim.softmax(dim=-1) # (B*H)*N*N
-        # if gated and attn.shape[1] == 4126:
-        #     self.visual_att(attn)
+       
         out = torch.einsum('b i j, b j c -> b i c', attn, v) # (B*H)*N*C
         out = out.view(B,H,N,C).permute(0,2,1,3).reshape(B,N,(H*C)) # B*N*(H*C)
-
         return self.to_out(out), attn
+       
+
     
     def visual_att(self, att):
         global iter_att
@@ -265,27 +256,20 @@ class GatedSelfAttentionDense(nn.Module):
 
 
     def forward(self, x, objs,t):
-        # if t >300:
-        #     self.scale = 1
-        # elif t > 200:
-        #     self.scale = 0.9
-        # else:
-        #     self.scale = 0.6
-        if t >500:
-            self.scale = 1
-        elif t > 300:
-            self.scale = 0.7
-        else:
-            self.scale = 0.4
-        # self.scale = 0
+        
         N_visual = x.shape[1]
+   
         objs = self.linear(objs)
         out, grounding_att = self.attn(  self.norm1(torch.cat([x,objs],dim=1)), True  )
         out = out[:,0:N_visual,:]
         x = x + self.scale*torch.tanh(self.alpha_attn) * out
         x = x + self.scale*torch.tanh(self.alpha_dense) * self.ff( self.norm2(x) )  
-        
-        return x , grounding_att
+        _, H,W = grounding_att.shape
+        if H== 286:
+            return x , grounding_att
+        else:
+            return x, None
+
 
 
 
@@ -370,22 +354,25 @@ class BasicTransformerBlock(nn.Module):
     def forward(self, x, context, objs,t):
 #        return checkpoint(self._forward, (x, context, objs), self.parameters(), self.use_checkpoint)
         # import pdb; pdb.set_trace()
-        if self.use_checkpoint and x.requires_grad:
-            return checkpoint.checkpoint(self._forward, x, context, objs,t)
-        else:
-            return self._forward(x, context, objs,t)
+        # if self.use_checkpoint and x.requires_grad:
+        #     return checkpoint.checkpoint(self._forward, x, context, objs,t)
+        # else:
+        return self._forward(x, context, objs,t)
 
     def _forward(self, x, context, objs,t): 
-        # self_att_grounding = []
+
         out, self_prob = self.attn1( self.norm1(x) ) 
+        H = self_prob.shape[1]
         x =  x + out 
-        x, self_prob_grounding = self.fuser(x, objs,t) # identity mapping in the beginning 
+
+        x, self_prob_grounding = self.fuser(x, objs,t) # identity mapping in the beginning
+        
+        
         x_1, prob = self.attn2(self.norm2(x), context, context) 
         x = x + x_1
         x = self.ff(self.norm3(x)) + x
-        # self_att_grounding.append(self_prob)
-        # self_att_grounding.append(self_prob_grounding)
-        return x, prob, self_prob 
+      
+        return x, prob, self_prob, self_prob_grounding 
 
 
 class SpatialTransformer(nn.Module):
@@ -421,10 +408,12 @@ class SpatialTransformer(nn.Module):
         x = rearrange(x, 'b c h w -> b (h w) c')
         probs = [] 
         self_prob_list = []
+        self_prob_grounding_list = []
         for block in self.transformer_blocks:
-            x, prob, self_prob = block(x, context, objs,t)
-            probs.append(prob)
-            self_prob_list.append(self_prob)
+            x, prob, self_prob, grouding_prob = block(x, context, objs,t)
+            if prob is not None: probs.append(prob)
+            if self_prob is not None: self_prob_list.append(self_prob)
+            if grouding_prob is not None: self_prob_grounding_list.append(grouding_prob)
         x = rearrange(x, 'b (h w) c -> b c h w', h=h, w=w)
         x = self.proj_out(x)
-        return x + x_in, probs, self_prob_list
+        return x + x_in, probs, self_prob_list, self_prob_grounding_list

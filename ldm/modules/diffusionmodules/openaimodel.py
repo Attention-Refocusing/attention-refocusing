@@ -7,6 +7,7 @@ import random
 import torch as th
 import torch.nn as nn
 import torch.nn.functional as F
+import torch
 
 from ldm.modules.diffusionmodules.util import (
     conv_nd,
@@ -43,16 +44,20 @@ class TimestepEmbedSequential(nn.Sequential, TimestepBlock):
     def forward(self, x, emb, context, objs,t):
         probs  = []
         self_prob_list = []
+        grounding_prob_list = []
         for layer in self:
             if isinstance(layer, TimestepBlock):
                 x = layer(x, emb)
             elif isinstance(layer, SpatialTransformer):
-                x, prob, self_prob = layer(x, context, objs,t)
-                probs.append(prob)
-                self_prob_list.append(self_prob)
+                x, prob, self_prob,ground_prob = layer(x, context, objs,t)
+                if prob != []: probs.append(prob)
+                if self_prob != []: self_prob_list.append(self_prob)
+                if ground_prob!=[]: grounding_prob_list.append(ground_prob)
+              
             else:
                 x = layer(x)
-        return x, probs, self_prob_list
+        
+        return x, probs, self_prob_list, grounding_prob_list
 
 
 class Upsample(nn.Module):
@@ -204,13 +209,7 @@ class ResBlock(TimestepBlock):
         :param emb: an [N x emb_channels] Tensor of timestep embeddings.
         :return: an [N x C x ...] Tensor of outputs.
         """
-        # return checkpoint(
-        #     self._forward, (x, emb), self.parameters(), self.use_checkpoint
-        # )
-        if self.use_checkpoint and x.requires_grad:
-            return checkpoint.checkpoint(self._forward, x, emb )
-        else:
-            return self._forward(x, emb) 
+        return self._forward(x, emb) 
 
 
     def _forward(self, x, emb):
@@ -434,7 +433,7 @@ class UNetModel(nn.Module):
 
 
         # Grounding tokens: B*N*C
-        # import pdb; pdb.set_trace()
+   
         objs = self.position_net( **grounding_input )  
         
         # Time embedding 
@@ -459,23 +458,29 @@ class UNetModel(nn.Module):
         hs = []
         probs_first = []
         self_prob_list_first = []
+        ground_list_first = []
         for module in self.input_blocks:
-            h,prob, self_prob = module(h, emb, context, objs,t)
+            h,prob, self_prob, ground_prob = module(h, emb, context, objs,t)
             hs.append(h)
             probs_first.append(prob)
             self_prob_list_first.append(self_prob)
+            ground_list_first.append(ground_prob)
 
-        h,mid_prob, self_prob_list_second = self.middle_block(h, emb, context, objs,t)
+        h,mid_prob, self_prob_list_second, ground_prob_second = self.middle_block(h, emb, context, objs,t)
         
         probs_third = []
         self_prob_list_third = []
+        ground_list_third = []
         for module in self.output_blocks:
             h = th.cat([h, hs.pop()], dim=1)
-            h, prob, self_prob = module(h, emb, context, objs,t)
+            h, prob, self_prob, ground_prob = module(h, emb, context, objs,t)
             probs_third.append(prob)
             self_prob_list_third.append(self_prob)
+            ground_list_third.append(ground_prob)
 
-        return self.out(h),probs_third , mid_prob,  probs_first, self_prob_list_first, [self_prob_list_second], self_prob_list_third
+            ground_list_first.append(ground_prob)
+        return self.out(h),probs_third , mid_prob,  probs_first, self_prob_list_first, [self_prob_list_second],self_prob_list_third,ground_list_first,[ground_prob_second], ground_list_third 
+
 
 
 
