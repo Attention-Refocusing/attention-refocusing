@@ -63,6 +63,9 @@ We also provide generated images from GLIGEN, and other baselines including Stab
 ## Evaluation
 Set up the environment, download detector models, and run evaluation for each category, see the [evaluation](data_evaluate_LLM/eval_metrics/README.md).
 
+
+## Attention-refocusing with other baselines
+[ControlNet + attention-refocusing](https://github.com/Attention-Refocusing/controlnet_attention)
 ## Acknowledgments
 
 This project is built on the following resources:
